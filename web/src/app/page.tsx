@@ -1,306 +1,139 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { Lightbulb } from 'lucide-react';
+import { useState } from 'react';
 
-// Simple Brick Building Animation
-const BrickBuilder = () => {
-  const [step, setStep] = useState(0);
-
-  useEffect(() => {
-    const timers = [
-      setTimeout(() => setStep(1), 1000),   // Start building
-      setTimeout(() => setStep(2), 3000),   // Show text
-      setTimeout(() => setStep(3), 4000),   // Show buttons
-    ];
-
-    return () => timers.forEach(clearTimeout);
-  }, []);
-
-  const bricks = [
-    { text: "Section 8", color: "bg-yellow-400" },
-    { text: "Public Housing", color: "bg-blue-500" },
-    { text: "Emergency Rental", color: "bg-yellow-500" },
-    { text: "Down Payment", color: "bg-blue-400" },
-    { text: "Veterans Housing", color: "bg-yellow-400" },
-    { text: "Senior Housing", color: "bg-blue-500" },
-    { text: "State Programs", color: "bg-yellow-500" },
-    { text: "Local Assistance", color: "bg-blue-400" },
-  ];
+export default function HomePage() {
+  const [isOn, setIsOn] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-black flex flex-col items-center justify-center px-4 relative overflow-hidden">
-      
-      {/* Background particles */}
-      <div className="absolute inset-0">
-        {[...Array(20)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-1 h-1 bg-yellow-400 rounded-full opacity-30"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 3}s`
-            }}
+    <main className="bg-white text-neutral-900 min-h-screen">
+      {/* Darkness veil with top→bottom reveal */}
+      <div
+        aria-hidden
+        className={`fixed inset-0 z-30 pointer-events-none bg-black/90 transform origin-top transition-transform duration-800 ease-out ${
+          isOn ? 'scale-y-0' : 'scale-y-100'
+        }`}
+      />
+      {/* Subtle white glow near the top that expands, not yellow */}
+      <div
+        aria-hidden
+        className={`fixed z-20 left-1/2 top-[22%] -translate-x-1/2 -translate-y-1/2 transform-gpu rounded-full aspect-square pointer-events-none transition-[transform,opacity] duration-900 ease-out ${
+          isOn ? 'scale-[10] opacity-0' : 'scale-50 opacity-60'
+        }`}
+        style={{
+          width: '32rem',
+          background:
+            'radial-gradient(circle at center, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0.35) 35%, rgba(255,255,255,0.1) 60%, rgba(255,255,255,0) 75%)',
+          filter: 'blur(8px)',
+        }}
+      />
+      {/* AHA + Switch (initial view) */}
+      <section className="min-h-[70vh] flex items-center justify-center relative z-10">
+        <div className="flex flex-col items-center gap-6 text-center">
+          {/* Light bulb above AHA */}
+          <Lightbulb
+            aria-hidden
+            className={`${
+              isOn
+                ? 'text-yellow-400 drop-shadow-[0_0_90px_rgba(250,204,21,0.95)]'
+                : 'text-neutral-300'
+            } transition-all duration-500`}
+            width={96}
+            height={96}
           />
-        ))}
-      </div>
-
-      {/* Brick Animation Area */}
-      <div className="relative z-10 mb-8">
-        <div className="grid grid-cols-4 gap-2 mb-8">
-          {bricks.map((brick, index) => (
-            <motion.div
-              key={index}
-              className={`w-20 h-8 ${brick.color} rounded shadow-lg flex items-center justify-center`}
-              initial={{ 
-                scale: 0,
-                opacity: 0,
-                y: 100,
-                rotate: Math.random() * 90 - 45
-              }}
-              animate={step >= 1 ? {
-                scale: 1,
-                opacity: 1,
-                y: 0,
-                rotate: 0
-              } : {}}
-              transition={{
-                duration: 0.8,
-                delay: index * 0.2,
-                type: "spring",
-                bounce: 0.6
-              }}
-              whileHover={{
-                scale: 1.1,
-                rotate: 5,
-                zIndex: 10
-              }}
-            >
-              <span className="text-xs font-bold text-white text-center px-1">
-                {brick.text}
-              </span>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-
-      {/* Text Content */}
-      <motion.div
-        className="text-center max-w-4xl z-10"
-        initial={{ opacity: 0, y: 50 }}
-        animate={step >= 2 ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 1 }}
-      >
-        <h1 className="text-5xl md:text-7xl font-black mb-6">
-          <span className="bg-gradient-to-r from-yellow-400 to-yellow-300 bg-clip-text text-transparent">
-            Building Dreams
-          </span>
-          <br />
-          <span className="text-white text-3xl md:text-5xl">
-            Brick by Brick
-          </span>
-        </h1>
-        
-        <p className="text-lg md:text-xl text-blue-200 mb-8 max-w-2xl mx-auto">
-          Every housing program is a building block toward your new home. 
-          Let us help you construct your path to affordable housing.
-        </p>
-
-        <motion.div
-          className="flex flex-col sm:flex-row gap-4 justify-center"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={step >= 3 ? { opacity: 1, scale: 1 } : {}}
-          transition={{ duration: 0.8, delay: 0.3 }}
-        >
-          <Link href="/apply">
-            <motion.button
-              className="px-8 py-4 bg-gradient-to-r from-yellow-400 to-yellow-500 text-black font-bold text-lg rounded-full shadow-xl"
-              whileHover={{ 
-                scale: 1.05,
-                boxShadow: "0 20px 40px rgba(255, 212, 0, 0.4)"
-              }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Start Building Your Future
-            </motion.button>
-          </Link>
-          
-          <motion.button
-            className="px-8 py-4 border-2 border-blue-400 text-blue-400 font-bold text-lg rounded-full hover:bg-blue-400/10 transition-all"
-            whileHover={{ 
-              scale: 1.05,
-              borderColor: "#FFD700",
-              color: "#FFD700"
-            }}
+          <h1
+            className={`text-6xl md:text-7xl font-black tracking-tight transition-colors duration-500 ${
+              isOn ? 'text-neutral-900 drop-shadow-[0_0_24px_rgba(250,204,21,0.35)]' : 'text-neutral-50 drop-shadow-[0_0_14px_rgba(255,255,255,0.25)]'
+            }`}
           >
-            Watch How It Works
-          </motion.button>
-        </motion.div>
+            AHA
+          </h1>
 
-        {/* Stats */}
-        <motion.div
-          className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6"
-          initial={{ opacity: 0, y: 30 }}
-          animate={step >= 3 ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 1, delay: 0.6 }}
-        >
-          {[
-            { number: "50,000+", label: "Families Helped" },
-            { number: "200+", label: "Housing Programs" },
-            { number: "98%", label: "Success Rate" }
-          ].map((stat, index) => (
-            <motion.div
-              key={index}
-              className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20"
-              whileHover={{ scale: 1.05, y: -5 }}
-              transition={{ duration: 0.3 }}
-            >
-              <div className="text-2xl md:text-3xl font-black text-yellow-400">
-                {stat.number}
-              </div>
-              <div className="text-blue-200 font-medium">
-                {stat.label}
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-      </motion.div>
+          {/* Light switch */}
+          <button
+            type="button"
+            role="switch"
+            aria-checked={isOn}
+            aria-label="Toggle light"
+            onClick={() => setIsOn((v) => !v)}
+            className={`relative w-16 h-9 rounded-full transition-colors duration-300 ${
+              isOn ? 'bg-yellow-400' : 'bg-neutral-300'
+            }`}
+          >
+            <span
+              className={`absolute top-1 left-1 h-7 w-7 rounded-full bg-white shadow transition-transform duration-300 ${
+                isOn ? 'translate-x-7' : 'translate-x-0'
+              }`}
+            />
+          </button>
 
-      {/* Scroll Indicator */}
-      <motion.div
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-        initial={{ opacity: 0 }}
-        animate={step >= 3 ? { opacity: 1 } : {}}
-        transition={{ duration: 1, delay: 1 }}
-      >
-        <motion.div
-          className="w-6 h-10 border-2 border-yellow-400 rounded-full flex justify-center cursor-pointer"
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-        >
-          <div className="w-1 h-3 bg-yellow-400 rounded-full mt-2"></div>
-        </motion.div>
-        <p className="text-yellow-400 text-sm mt-2 font-medium text-center">Scroll to explore</p>
-      </motion.div>
-    </div>
-  );
-};
-
-// How It Works Section
-const HowItWorksSection = () => {
-  return (
-    <section className="py-20 px-6 bg-white">
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-6xl font-black mb-6 bg-gradient-to-r from-yellow-500 to-blue-500 bg-clip-text text-transparent">
-            How AHA Works
-          </h2>
-          <p className="text-xl text-gray-600">
-            Our simple 3-step process connects you with housing assistance
-          </p>
+          <p className="text-sm text-neutral-500">Flip the switch to learn more</p>
         </div>
+      </section>
 
-        <div className="grid md:grid-cols-3 gap-8">
-          {[
-            {
-              step: "01",
-              title: "Tell Us About You",
-              description: "Share your household information, income, and housing needs",
-              icon: "📝",
-              color: "from-yellow-400 to-yellow-500"
-            },
-            {
-              step: "02",
-              title: "We Find Programs", 
-              description: "Our AI matches you with relevant housing assistance programs",
-              icon: "🔍",
-              color: "from-blue-400 to-blue-500"
-            },
-            {
-              step: "03",
-              title: "Apply with Confidence",
-              description: "Get guidance and track your progress across programs", 
-              icon: "🏠",
-              color: "from-yellow-400 to-blue-400"
-            }
-          ].map((item, index) => (
-            <motion.div
-              key={index}
-              className="text-center group"
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: index * 0.2 }}
-              viewport={{ once: true }}
-            >
-              <motion.div
-                className="bg-gradient-to-br from-blue-50 to-yellow-50 rounded-2xl p-8 shadow-lg"
-                whileHover={{ y: -10, scale: 1.02, shadow: "0 25px 50px rgba(0,0,0,0.1)" }}
-                transition={{ duration: 0.3 }}
-              >
-                <div className="text-5xl mb-4">{item.icon}</div>
-                <div className={`text-4xl font-black mb-4 bg-gradient-to-r ${item.color} bg-clip-text text-transparent`}>
-                  {item.step}
+      {/* Revealed content */}
+      {isOn && (
+        <div className="relative z-0 transition-opacity duration-700">
+          {/* Crisis section */}
+          <section className="max-w-7xl mx-auto px-6 pb-10">
+            <div className="rounded-3xl border border-neutral-200 bg-white shadow-sm p-8 md:p-12">
+              <h2 className="text-3xl md:text-4xl font-bold">The housing shortage and affordability crisis</h2>
+              <p className="mt-3 text-neutral-700 max-w-3xl">
+                Across the country, families face rising rents, limited supply, and long waitlists. Navigating assistance
+                programs is confusing, time-consuming, and often overwhelming.
+              </p>
+              <div className="mt-6 grid sm:grid-cols-3 gap-4">
+                <div className="rounded-xl bg-neutral-50 border border-neutral-200 p-4">
+                  <div className="text-2xl font-extrabold">High demand</div>
+                  <p className="text-sm text-neutral-700 mt-1">Waitlists for many programs are years long.</p>
                 </div>
-                <h3 className="text-xl font-bold mb-4 text-gray-800">
-                  {item.title}
-                </h3>
-                <p className="text-gray-600">
-                  {item.description}
-                </p>
-              </motion.div>
-            </motion.div>
-          ))}
+                <div className="rounded-xl bg-neutral-50 border border-neutral-200 p-4">
+                  <div className="text-2xl font-extrabold">Limited supply</div>
+                  <p className="text-sm text-neutral-700 mt-1">Affordable units are scarce in many areas.</p>
+                </div>
+                <div className="rounded-xl bg-neutral-50 border border-neutral-200 p-4">
+                  <div className="text-2xl font-extrabold">Complex rules</div>
+                  <p className="text-sm text-neutral-700 mt-1">Eligibility varies by location, income, and household.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* How AHA helps */}
+          <section className="max-w-7xl mx-auto px-6 pb-16">
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="rounded-2xl border border-neutral-200 bg-white shadow-sm p-6">
+                <h3 className="text-xl font-bold">Clarity</h3>
+                <p className="mt-2 text-neutral-700">We translate policy into plain language so you know what to do next.</p>
+                <ul className="mt-3 list-disc list-inside text-neutral-700 text-sm space-y-1">
+                  <li>Simple step-by-step guidance</li>
+                  <li>Personalized document checklist</li>
+                  <li>No ads or data selling—ever</li>
+                </ul>
+              </div>
+              <div className="rounded-2xl border border-neutral-200 bg-white shadow-sm p-6">
+                <h3 className="text-xl font-bold">Confidence</h3>
+                <p className="mt-2 text-neutral-700">Reduce mistakes and delays with helpful tips at each step.</p>
+                <ul className="mt-3 list-disc list-inside text-neutral-700 text-sm space-y-1">
+                  <li>Eligibility checks for local programs</li>
+                  <li>Progress tracking and reminders</li>
+                  <li>Privacy-first design</li>
+                </ul>
+              </div>
+            </div>
+            <div className="mt-8">
+              <Link
+                href="/apply"
+                className="inline-flex items-center justify-center h-12 px-6 rounded-xl bg-neutral-900 text-white font-semibold hover:bg-neutral-800"
+              >
+                Start your guided journey
+              </Link>
+            </div>
+          </section>
         </div>
-      </div>
-    </section>
-  );
-};
-
-// Call to Action Section
-const CTASection = () => {
-  return (
-    <section className="py-20 px-6 bg-gradient-to-br from-blue-600 to-blue-800">
-      <div className="max-w-4xl mx-auto text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-        >
-          <h2 className="text-4xl md:text-5xl font-black text-white mb-6">
-            Ready to Find Your 
-            <span className="text-yellow-400"> Dream Home?</span>
-          </h2>
-          <p className="text-xl text-blue-100 mb-8">
-            Join thousands of families who have found affordable housing through our platform
-          </p>
-          <Link href="/apply">
-            <motion.button
-              className="px-10 py-5 bg-gradient-to-r from-yellow-400 to-yellow-500 text-black font-bold text-xl rounded-full shadow-2xl"
-              whileHover={{ 
-                scale: 1.05,
-                boxShadow: "0 25px 50px rgba(255, 212, 0, 0.4)"
-              }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Start Your Application Today
-            </motion.button>
-          </Link>
-        </motion.div>
-      </div>
-    </section>
-  );
-};
-
-// Main Page
-export default function LandingPage() {
-  return (
-    <div className="relative">
-      <BrickBuilder />
-      <HowItWorksSection />
-      <CTASection />
-    </div>
+      )}
+    </main>
   );
 }
