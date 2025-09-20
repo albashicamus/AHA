@@ -166,32 +166,53 @@ export default function Landing() {
           </svg>
           
           {/* Picture Display Area */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center p-6 sm:p-8">
-            {/* Placeholder for pictures - you can replace this with actual images */}
-            <div className="w-full h-full flex flex-col items-center justify-around">
-              {/* Sample picture placeholders */}
-              <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 bg-gray-200 rounded-lg shadow-md flex items-center justify-center">
-                <svg className="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
-                </svg>
+          <div className="absolute inset-0 flex items-center justify-center p-2 sm:p-3">
+            {/* Layered Pictures Container */}
+            <div className="w-full h-full relative">
+              {/* Background Picture */}
+              <div className="absolute inset-0">
+                <img 
+                  src="/housing-image.jpg" 
+                  alt="Housing assistance program" 
+                  className="w-full h-full object-cover rounded-2xl shadow-lg"
+                  onError={(e) => {
+                    // Fallback to placeholder if image doesn't exist
+                    e.currentTarget.style.display = 'none';
+                    e.currentTarget.nextElementSibling.style.display = 'flex';
+                  }}
+                />
+                {/* Fallback placeholder for background image */}
+                <div className="w-full h-full bg-gray-200 rounded-2xl shadow-lg flex items-center justify-center" style={{display: 'none'}}>
+                  <div className="text-center">
+                    <svg className="w-16 h-16 text-gray-400 mx-auto mb-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
+                    </svg>
+                    <p className="text-gray-500 text-sm">Add your image to<br />/public/housing-image.jpg</p>
+                  </div>
+                </div>
               </div>
-              
-              <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 bg-gray-200 rounded-lg shadow-md flex items-center justify-center">
-                <svg className="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
-                </svg>
-              </div>
-              
-              <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 bg-gray-200 rounded-lg shadow-md flex items-center justify-center">
-                <svg className="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
-                </svg>
-              </div>
-              
-              <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 bg-gray-200 rounded-lg shadow-md flex items-center justify-center">
-                <svg className="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
-                </svg>
+
+              {/* Second Picture - Completely Separate to the Left */}
+              <div className="absolute top-4 -left-80 w-4/5 h-4/5 z-10">
+                <img 
+                  src="/housing-image-2.jpg" 
+                  alt="Housing assistance success story" 
+                  className="w-full h-full object-cover rounded-2xl shadow-2xl border-4 border-white"
+                  onError={(e) => {
+                    // Fallback to placeholder if second image doesn't exist
+                    e.currentTarget.style.display = 'none';
+                    e.currentTarget.nextElementSibling.style.display = 'flex';
+                  }}
+                />
+                {/* Fallback placeholder for foreground image */}
+                <div className="w-full h-full bg-gray-300 rounded-2xl shadow-2xl border-4 border-white flex items-center justify-center" style={{display: 'none'}}>
+                  <div className="text-center">
+                    <svg className="w-12 h-12 text-gray-500 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
+                    </svg>
+                    <p className="text-gray-600 text-xs">Add second image to<br />/public/housing-image-2.jpg</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -200,7 +221,7 @@ export default function Landing() {
         {/* Main Content Container */}
         <div className="relative z-10 h-full max-w-screen-xl mx-auto px-4 sm:px-6 md:px-10">
           {/* Top Left - Logo and Headline with Cloud */}
-          <div className="absolute top-6 sm:top-8 md:top-10 left-0 sm:left-2 md:left-4">
+          <div className="absolute top-6 sm:top-8 md:top-10 -left-32 sm:-left-24 md:-left-16">
             {/* Logo */}
             <div className="mb-4 sm:mb-6">
               <h2 className="text-2xl sm:text-3xl font-bold text-blue-600 tracking-wide">
@@ -235,7 +256,7 @@ export default function Landing() {
           </div>
 
           {/* Bottom Left Content */}
-          <div className="absolute bottom-48 sm:bottom-52 md:bottom-56 lg:bottom-60 left-0 sm:left-2 md:left-4 max-w-prose">
+          <div className="absolute bottom-48 sm:bottom-52 md:bottom-56 lg:bottom-60 -left-32 sm:-left-24 md:-left-16 max-w-prose">
             {/* Supporting Text */}
             <p className="text-sm sm:text-base text-gray-700 mb-4 leading-relaxed">
               We empower individuals to combat the housing inaffordability crisis worldwide.
